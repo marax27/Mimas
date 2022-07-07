@@ -5,6 +5,10 @@ VisualStudioVersion = 17.3.32505.426
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mimas.Server.Web", "Mimas.Server.Web\Mimas.Server.Web.csproj", "{A70A5D2B-CE40-4944-AE28-58B981DF9C23}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mimas.Server.Application", "Mimas.Server.Application\Mimas.Server.Application.csproj", "{882EAF3C-4DC6-4C1D-93AD-D0B879420029}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mimas.Server.Infrastructure", "Mimas.Server.Infrastructure\Mimas.Server.Infrastructure.csproj", "{0D4E0E7D-04A5-4324-8869-57ADDB62A2B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{A70A5D2B-CE40-4944-AE28-58B981DF9C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A70A5D2B-CE40-4944-AE28-58B981DF9C23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A70A5D2B-CE40-4944-AE28-58B981DF9C23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{882EAF3C-4DC6-4C1D-93AD-D0B879420029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{882EAF3C-4DC6-4C1D-93AD-D0B879420029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{882EAF3C-4DC6-4C1D-93AD-D0B879420029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{882EAF3C-4DC6-4C1D-93AD-D0B879420029}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D4E0E7D-04A5-4324-8869-57ADDB62A2B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D4E0E7D-04A5-4324-8869-57ADDB62A2B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D4E0E7D-04A5-4324-8869-57ADDB62A2B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D4E0E7D-04A5-4324-8869-57ADDB62A2B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
