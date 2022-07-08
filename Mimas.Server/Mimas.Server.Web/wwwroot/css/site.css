@@ -16,3 +16,19 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.chip {
+    padding: 0.1rem 0.2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.chip.chip-primary {
+    border: solid 1px dodgerblue;
+    color: dodgerblue;
+}
+
+.chip.chip-success {
+    border: solid 1px green;
+    border: green;
+}

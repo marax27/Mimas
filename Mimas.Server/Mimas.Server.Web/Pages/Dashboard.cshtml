@@ -5,8 +5,6 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
-
 <h5>Items Delivery</h5>
 @if(Model.ItemsChart is null)
 {
@@ -35,8 +33,8 @@ else
     <div class="chart-legend">
         <p>
             <span class="legend-bullet text-danger">&#9679;</span> Problems exist, 
-            <span class="legend-bullet text-dark">&#9679;</span> Created - box not assigned, 
-            <span class="legend-bullet text-warning">&#9679;</span> Assigned to box, 
+            <span class="legend-bullet text-dark">&#9679;</span> Valid, created - box not assigned, 
+            <span class="legend-bullet text-warning">&#9679;</span> Valid, assigned to box, 
             <span class="legend-bullet text-success">&#9679;</span> Delivered
         </p>
     </div>

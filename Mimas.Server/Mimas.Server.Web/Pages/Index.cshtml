@@ -61,7 +61,7 @@
                                 <th scope="col">ID</th>
                                 <th scope="col">Items</th>
                                 <th scope="col">Owner</th>
-                                <th scope="col">Registered</th>
+                                <th scope="col">Timestamps</th>
                                 <th scope="col">Info</th>
                             </tr>
                         </thead>
@@ -72,7 +72,13 @@
                                     <td>@box.ShortId</td>
                                     <td>@box.ItemCount</td>
                                     <td>@box.OwnerName</td>
-                                    <td><small>@box.RegisteredOn</small> </td>
+                                    <td>
+                                        <small><span class="chip chip-primary" title="Registered">REG</span> @box.RegisteredOn</small>
+                                        @if (box.DeliveredOn != null)
+                                        {
+                                            <small><span class="chip chip-success" title="Delivered">DLV</span> @box.DeliveredOn</small>
+                                        }
+                                    </td>
                                     <td>!</td>
                                 </tr>
                             }
