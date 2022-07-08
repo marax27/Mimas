@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Mimas.Server.Application.Features;
+using Mimas.Server.Application.Ports;
 
 namespace Mimas.Server.Web.Pages
 {
@@ -9,6 +10,14 @@ namespace Mimas.Server.Web.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IMediator _mediator;
+
+        public IReadOnlyCollection<Owner> Owners = Array.Empty<Owner>();
+
+        [BindProperty]
+        public string? ShippingManifestText { get; set; }
+
+        [BindProperty]
+        public string? OwnerName { get; set; }
 
         public int itemCount;
 
@@ -20,8 +29,34 @@ namespace Mimas.Server.Web.Pages
 
         public async Task OnGet()
         {
-            var items = await _mediator.Send(new GetAllItemsQuery());
-            itemCount = items.Items.Count();
+            var result = await _mediator.Send(new GetAllOwnersQuery());
+            Owners = result.Owners.ToArray();
+        }
+
+        public async Task OnPost()
+        {
+            var items = SplitManifestIntoItemNames();
+            var ownerName = OwnerName ?? throw new ArgumentNullException(nameof(OwnerName));
+
+            var command = new RegisterItemBatchCommand(items, ownerName);
+            await _mediator.Send(command);
+        }
+
+        private IReadOnlyCollection<string> SplitManifestIntoItemNames()
+        {
+            if (string.IsNullOrWhiteSpace(ShippingManifestText))
+                throw new ArgumentException("Empty manifest.", nameof(ShippingManifestText));
+
+            var splitStrategy = StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries;
+            var result = new List<string>();
+            
+            var lines = ShippingManifestText.Split(new[] { '\r', '\n' }, splitStrategy);
+            foreach (var line in lines)
+            {
+                result.AddRange(line.Split(',', splitStrategy));
+            }
+
+            return result;
         }
     }
 }

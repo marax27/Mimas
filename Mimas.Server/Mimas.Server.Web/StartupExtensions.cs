@@ -21,6 +21,7 @@ public static class StartupExtensions
         builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
         builder.Services.AddTransient<IItemRepository, DbItemRepository>();
+        builder.Services.AddTransient<IOwnerRepository, DbOwnerRepository>();
 
         builder.Services.AddRazorPages();
 
@@ -56,9 +57,6 @@ public static class StartupExtensions
         var dbConnectionString = configuration.GetConnectionString("MimasDatabase") +
                                  $"User ID={dbUser};Password={dbPassword};";
 
-        services.AddSingleton(Options.Create(new DatabaseConnectionSettings
-        {
-            ConnectionString = dbConnectionString
-        }));
+        services.AddSingleton(Options.Create(new DatabaseConnectionSettings(dbConnectionString)));
     }
 }

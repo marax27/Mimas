@@ -17,9 +17,20 @@ public class DbItemRepository : IItemRepository
     public async Task<IEnumerable<ItemViewModel>> GetAll()
     {
         await using var connection = new SqlConnection(_settings.Value.ConnectionString);
-        connection.Open();
+        await connection.OpenAsync();
         var result = await connection.QueryAsync<ItemViewModel>(SelectAllItems);
         return result;
+    }
+
+    public async Task AddMany(IEnumerable<NewItemModel> itemViewModels)
+    {
+        await using var connection = new SqlConnection(_settings.Value.ConnectionString);
+        await connection.OpenAsync();
+        foreach (var item in itemViewModels)
+        {
+            var query = CreateNewItemQuery(item.AssignedBoxShortId);
+            await connection.ExecuteAsync(query, item);
+        }
     }
 
     private const string SelectAllItems = $@"
@@ -33,4 +44,22 @@ FROM Items i
 INNER JOIN Owners o ON o.id = i.owner_id
 INNER JOIN Boxes b ON b.short_id = i.box_id
 ";
+
+    private static string CreateNewItemQuery(string? boxShortId)
+    {
+        var piece = boxShortId is null ? AddNewItemBoxNotAssigned : AddNewItemBoxAssigned;
+        return $@"
+INSERT INTO Items
+    (name, item_count, owner_id, box_id)
+VALUES (
+    @{nameof(NewItemModel.Name)},
+    @{nameof(NewItemModel.ItemCount)},
+    (SELECT o.id FROM Owners o WHERE o.name = @{nameof(NewItemModel.OwnerName)}),
+    {piece}
+)
+";
+    }
+
+    private const string AddNewItemBoxNotAssigned = "NULL";
+    private const string AddNewItemBoxAssigned = $"(SELECT b.id FROM Boxes b WHERE b.short_id = @{nameof(NewItemModel.AssignedBoxShortId)})";
 }

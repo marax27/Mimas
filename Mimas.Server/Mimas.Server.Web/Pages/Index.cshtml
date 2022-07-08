@@ -7,4 +7,37 @@
 <div class="text-center">
     <h1 class="display-4">Welcome (@(Model.itemCount) items found)</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    
+    <div class="manifest card">
+        <div class="card-body">
+            <h5 class="card-title">Shipping manifest</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+                List items. You can either <strong>save those items for later</strong>, or you can <strong>assign them to a box</strong>.
+            </h6>
+            <h6 class="card-subtitle mb-2 text-muted">
+                Format: item names separated by a comma (<code>,</code>) or a newline (1 item per line).
+            </h6>
+            <form method="post">
+                <div class="form-group">
+                    <textarea rows="16" style="width:100%" asp-for="ShippingManifestText"
+                        id="ShippingManifestText" name="ShippingManifestText"></textarea>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12 col-lg-8">
+                        <select class="form-select" asp-for="OwnerName">
+                            <option selected>Pick an owner</option>
+                            @foreach(var owner in Model.Owners)
+                            {
+                                <option value="@owner.Name">@owner.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-sm-12 col-lg-4">
+                        <button type="submit" class="btn btn-primary">Submit manifest</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
