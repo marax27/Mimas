@@ -42,7 +42,7 @@ SELECT
     b.short_id   AS {nameof(ItemViewModel.AssignedBoxShortId)}
 FROM Items i
 INNER JOIN Owners o ON o.id = i.owner_id
-INNER JOIN Boxes b ON b.short_id = i.box_id
+LEFT JOIN Boxes b ON b.id = i.box_id
 ";
 
     private static string CreateNewItemQuery(string? boxShortId)
