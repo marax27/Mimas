@@ -5,44 +5,79 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome (@(Model.itemCount) items found)</h1>
+    <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     
-    <div class="manifest card">
-        <div class="card-body">
-            <h5 class="card-title">Shipping manifest</h5>
-            <h6 class="card-subtitle mb-2 text-muted">
-                List items. You can either <strong>save those items for later</strong>, or you can <strong>assign them to a box</strong>.
-            </h6>
-            <h6 class="card-subtitle mb-2 text-muted">
-                Format: item names separated by a comma (<code>,</code>) or a newline (1 item per line).
-            </h6>
-            <form method="post">
-                <div class="form-group">
-                    <textarea rows="16" style="width:100%" asp-for="ShippingManifestText"
-                        id="ShippingManifestText" name="ShippingManifestText"></textarea>
-                </div>
-                <div class="form-group mt-2 row p-3">
-                    <input type="text" class="form-control col-sm-12 col-lg-6 mt-2" placeholder="Human-assigned Box ID (optional)"
-                        id="AssignedBoxShortId" asp-for="AssignedBoxShortId"/>
+    <div class="row">
+        <div class="col-sm-7">
+            <div class="manifest card">
+                <div class="card-body">
+                    <h5 class="card-title">Shipping manifest</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        List items. You can either <strong>save those items for later</strong>, or you can <strong>assign them to a box</strong>.
+                    </h6>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        Format: item names separated by a comma (<code>,</code>) or a newline (1 item per line).
+                    </h6>
+                    <hr />
 
-                    <div class="col-sm-12 col-lg-6 mt-2">
-                        <select class="form-select" asp-for="OwnerName" id="OwnerPicker">
-                            <option selected value="">Pick an owner</option>
-                            @foreach(var owner in Model.Owners)
+                    <form method="post">
+                        <div class="form-group">
+                            <textarea rows="16" style="width:100%" asp-for="ShippingManifestText"
+                                id="ShippingManifestText" name="ShippingManifestText"></textarea>
+                        </div>
+                        <div class="form-group mt-2 row p-3">
+                            <input type="text" class="form-control col-sm-12 col-lg-6 mt-2" placeholder="Human-assigned Box ID (optional)"
+                                id="AssignedBoxShortId" asp-for="AssignedBoxShortId"/>
+
+                            <div class="col-sm-12 col-lg-6 mt-2">
+                                <select class="form-select" asp-for="OwnerName" id="OwnerPicker">
+                                    <option selected value="">Pick an owner</option>
+                                    @foreach(var owner in Model.Owners)
+                                    {
+                                        <option value="@owner.Name">@owner.Name</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-sm-12 col-lg-4 mt-2">
+                                <button type="submit" class="btn btn-primary" x-enable-when-selected="OwnerPicker">
+                                    Submit manifest
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="boxes card">
+                <div class="card-body">
+                    <h5 class="card-title">Registered boxes</h5>
+                    <hr />
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Items</th>
+                                <th scope="col">Owner</th>
+                                <th scope="col">Registered</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var box in Model.Boxes)
                             {
-                                <option value="@owner.Name">@owner.Name</option>
+                                <tr>
+                                    <td>@box.ShortId</td>
+                                    <td>@box.ItemCount</td>
+                                    <td>@box.OwnerName</td>
+                                    <td><small>@box.RegisteredOn</small> </td>
+                                </tr>
                             }
-                        </select>
-                    </div>
-
-                    <div class="col-sm-12 col-lg-3 mt-2">
-                        <button type="submit" class="btn btn-primary" x-enable-when-selected="OwnerPicker">
-                            Submit manifest
-                        </button>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>

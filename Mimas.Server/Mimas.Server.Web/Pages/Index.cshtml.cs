@@ -12,6 +12,7 @@ namespace Mimas.Server.Web.Pages
         private readonly IMediator _mediator;
 
         public IReadOnlyCollection<Owner> Owners = Array.Empty<Owner>();
+        public IReadOnlyCollection<BoxViewModel> Boxes = Array.Empty<BoxViewModel>();
 
         [BindProperty]
         public string? ShippingManifestText { get; set; }
@@ -21,8 +22,6 @@ namespace Mimas.Server.Web.Pages
         
         [BindProperty]
         public string? AssignedBoxShortId { get; set; }
-
-        public int itemCount;
 
         public IndexModel(ILogger<IndexModel> logger, IMediator mediator)
         {
@@ -63,8 +62,13 @@ namespace Mimas.Server.Web.Pages
 
         private async Task InitialisePage()
         {
-            var result = await _mediator.Send(new GetAllOwnersQuery());
-            Owners = result.Owners.ToArray();
+            var ownerTask = _mediator.Send(new GetAllOwnersQuery());
+            var boxTask = _mediator.Send(new GetAllBoxesQuery());
+            await Task.WhenAll(ownerTask, boxTask);
+            var (owners, boxes) = (await ownerTask, await boxTask);
+
+            Owners = owners.Owners.ToArray();
+            Boxes = boxes.Boxes.ToArray();
         }
     }
 }

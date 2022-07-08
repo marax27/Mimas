@@ -22,6 +22,7 @@ public static class StartupExtensions
 
         builder.Services.AddTransient<IItemRepository, DbItemRepository>();
         builder.Services.AddTransient<IOwnerRepository, DbOwnerRepository>();
+        builder.Services.AddTransient<IBoxRepository, DbBoxRepository>();
 
         builder.Services.AddRazorPages();
 
