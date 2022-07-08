@@ -68,7 +68,9 @@ namespace Mimas.Server.Web.Pages
             var (owners, boxes) = (await ownerTask, await boxTask);
 
             Owners = owners.Owners.ToArray();
-            Boxes = boxes.Boxes.ToArray();
+            Boxes = boxes.Boxes
+                .OrderByDescending(box => box.RegisteredOn)
+                .ToArray();
         }
     }
 }

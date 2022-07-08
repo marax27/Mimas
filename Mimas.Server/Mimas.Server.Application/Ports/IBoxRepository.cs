@@ -8,7 +8,15 @@ public record BoxViewModel(
     DateTime? DeliveredOn
 );
 
+public record AddBoxModel(
+    string ShortId,
+    string OwnerName,
+    DateTime RegisteredOn
+);
+
 public interface IBoxRepository
 {
     Task<IEnumerable<BoxViewModel>> GetAll();
+    Task<bool> Contains(string boxShortId);
+    Task Add(AddBoxModel box);
 }
