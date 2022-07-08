@@ -1,0 +1,43 @@
+﻿@page
+@model DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Use this page to detail your site's privacy policy.</p>
+
+<h5>Items Delivery</h5>
+@if(Model.ItemsChart is null)
+{
+    <p>Empty!</p>
+}
+else
+{
+    <div class="progress" style="width: 60%">
+        <div class="progress-bar bg-danger"
+            style="width: @(Model.ItemsChart.GetDangerCssPercentage(100))">
+            @(Model.ItemsChart.Danger)
+        </div>
+        <div class="progress-bar bg-dark"
+            style="width: @(Model.ItemsChart.GetDarkCssPercentage(100))">
+            @(Model.ItemsChart.Dark)
+        </div>
+        <div class="progress-bar bg-warning
+            progress-bar-stripped" style="width: @(Model.ItemsChart.GetWarningCssPercentage(100))">
+            @(Model.ItemsChart.Warning)
+        </div>
+        <div class="progress-bar bg-success
+            progress-bar-stripped" style="width: @(Model.ItemsChart.GetSuccessCssPercentage(100))">
+            @(Model.ItemsChart.Success)
+        </div>
+    </div>
+    <div class="chart-legend">
+        <p>
+            <span class="legend-bullet text-danger">&#9679;</span> Problems exist, 
+            <span class="legend-bullet text-dark">&#9679;</span> Created - box not assigned, 
+            <span class="legend-bullet text-warning">&#9679;</span> Assigned to box, 
+            <span class="legend-bullet text-success">&#9679;</span> Delivered
+        </p>
+    </div>
+}
