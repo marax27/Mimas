@@ -39,3 +39,39 @@ else
         </p>
     </div>
 }
+
+<h5>Registered Boxes</h5>
+@if(Model.BoxesChart is null)
+{
+    <p>Empty!</p>
+}
+else
+{
+    <div class="progress" style="width: 60%">
+        <div class="progress-bar bg-danger"
+             style="width: @(Model.BoxesChart.GetDangerCssPercentage(100))">
+            @(Model.BoxesChart.Danger)
+        </div>
+        <div class="progress-bar bg-dark"
+             style="width: @(Model.BoxesChart.GetDarkCssPercentage(100))">
+            @(Model.BoxesChart.Dark)
+        </div>
+        <div class="progress-bar bg-warning
+            progress-bar-stripped" style="width: @(Model.BoxesChart.GetWarningCssPercentage(100))">
+            @(Model.BoxesChart.Warning)
+        </div>
+        <div class="progress-bar bg-success
+            progress-bar-stripped" style="width: @(Model.BoxesChart.GetSuccessCssPercentage(100))">
+            @(Model.BoxesChart.Success)
+        </div>
+    </div>
+    <div class="chart-legend">
+        <p>
+            <span class="legend-bullet text-danger">&#9679;</span> Problems exist, 
+            <span class="legend-bullet text-dark">&#9679;</span> Created - empty, 
+            <span class="legend-bullet text-warning">&#9679;</span> Created - items assigned, 
+            <span class="legend-bullet text-success">&#9679;</span> Delivered
+        </p>
+    </div>
+}
+

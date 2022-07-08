@@ -13,6 +13,7 @@ namespace Mimas.Server.Web.Pages
         private readonly ITimeProvider _timeProvider;
 
         public ProgressChartViewModel? ItemsChart { get; private set; }
+        public ProgressChartViewModel? BoxesChart { get; private set; }
 
         public DashboardModel(ILogger<DashboardModel> logger,
             IItemRepository itemRepository, IBoxRepository boxRepository, ITimeProvider timeProvider)
@@ -25,16 +26,40 @@ namespace Mimas.Server.Web.Pages
 
         public async Task OnGet()
         {
-            ItemsChart = await GenerateItemsChart();
+            var (boxTask, itemTask) = (_boxRepository.GetAll(), _itemRepository.GetAll());
+            await Task.WhenAll(boxTask, itemTask);
+            var (allBoxes, allItems) = ((await boxTask).ToArray(), (await itemTask).ToArray());
+
+            ItemsChart = GenerateItemsChart(allBoxes, allItems);
+            BoxesChart = GenerateBoxesChart(allBoxes);
         }
 
-        private async Task<ProgressChartViewModel> GenerateItemsChart()
+        private ProgressChartViewModel GenerateBoxesChart(IReadOnlyCollection<BoxViewModel> allBoxes)
         {
             var (dark, danger, warning, success) = (0, 0, 0, 0);
 
-            var (boxTask, itemTask) = (_boxRepository.GetAll(), _itemRepository.GetAll());
-            await Task.WhenAll(boxTask, itemTask);
-            var (allBoxes, allItems) = ((await boxTask).ToArray(), await itemTask);
+            foreach (var box in allBoxes)
+            {
+                if (box.ItemCount < 1)
+                {
+                    ++dark;
+                    continue;
+                }
+
+                if (box.DeliveredOn is null)
+                    ++warning;
+                else
+                    ++success;
+            }
+
+            return new(dark, danger, warning, success);
+        }
+
+        private ProgressChartViewModel GenerateItemsChart(
+            IReadOnlyCollection<BoxViewModel> allBoxes,
+            IReadOnlyCollection<ItemViewModel> allItems)
+        {
+            var (dark, danger, warning, success) = (0, 0, 0, 0);
             var timeNow = _timeProvider.GetTimeNow();
 
             foreach (var item in allItems)
@@ -44,7 +69,6 @@ namespace Mimas.Server.Web.Pages
                     ++danger;
                     continue;
                 }
-
                 if (item.AssignedBoxShortId is null)
                 {
                     ++dark;
