@@ -18,6 +18,9 @@ namespace Mimas.Server.Web.Pages
 
         [BindProperty]
         public string? OwnerName { get; set; }
+        
+        [BindProperty]
+        public string? AssignedBoxShortId { get; set; }
 
         public int itemCount;
 
@@ -37,7 +40,7 @@ namespace Mimas.Server.Web.Pages
             var items = SplitManifestIntoItemNames();
             var ownerName = OwnerName ?? throw new ArgumentNullException(nameof(OwnerName));
 
-            var command = new RegisterItemBatchCommand(items, ownerName);
+            var command = new RegisterItemBatchCommand(items, ownerName, AssignedBoxShortId);
             await Task.WhenAll(_mediator.Send(command), InitialisePage());
         }
 

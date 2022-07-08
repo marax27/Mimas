@@ -22,10 +22,13 @@
                     <textarea rows="16" style="width:100%" asp-for="ShippingManifestText"
                         id="ShippingManifestText" name="ShippingManifestText"></textarea>
                 </div>
-                <div class="form-group row">
-                    <div class="col-sm-12 col-lg-8">
-                        <select class="form-select" asp-for="OwnerName">
-                            <option selected>Pick an owner</option>
+                <div class="form-group mt-2 row p-3">
+                    <input type="text" class="form-control col-sm-12 col-lg-6 mt-2" placeholder="Human-assigned Box ID (optional)"
+                        id="AssignedBoxShortId" asp-for="AssignedBoxShortId"/>
+
+                    <div class="col-sm-12 col-lg-6 mt-2">
+                        <select class="form-select" asp-for="OwnerName" id="OwnerPicker">
+                            <option selected value="">Pick an owner</option>
                             @foreach(var owner in Model.Owners)
                             {
                                 <option value="@owner.Name">@owner.Name</option>
@@ -33,8 +36,10 @@
                         </select>
                     </div>
 
-                    <div class="col-sm-12 col-lg-4">
-                        <button type="submit" class="btn btn-primary">Submit manifest</button>
+                    <div class="col-sm-12 col-lg-3 mt-2">
+                        <button type="submit" class="btn btn-primary" x-enable-when-selected="OwnerPicker">
+                            Submit manifest
+                        </button>
                     </div>
                 </div>
             </form>
