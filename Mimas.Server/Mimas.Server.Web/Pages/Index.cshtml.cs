@@ -29,8 +29,7 @@ namespace Mimas.Server.Web.Pages
 
         public async Task OnGet()
         {
-            var result = await _mediator.Send(new GetAllOwnersQuery());
-            Owners = result.Owners.ToArray();
+            await InitialisePage();
         }
 
         public async Task OnPost()
@@ -39,7 +38,7 @@ namespace Mimas.Server.Web.Pages
             var ownerName = OwnerName ?? throw new ArgumentNullException(nameof(OwnerName));
 
             var command = new RegisterItemBatchCommand(items, ownerName);
-            await _mediator.Send(command);
+            await Task.WhenAll(_mediator.Send(command), InitialisePage());
         }
 
         private IReadOnlyCollection<string> SplitManifestIntoItemNames()
@@ -57,6 +56,12 @@ namespace Mimas.Server.Web.Pages
             }
 
             return result;
+        }
+
+        private async Task InitialisePage()
+        {
+            var result = await _mediator.Send(new GetAllOwnersQuery());
+            Owners = result.Owners.ToArray();
         }
     }
 }
