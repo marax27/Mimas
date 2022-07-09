@@ -19,4 +19,5 @@ public interface IBoxRepository
     Task<IEnumerable<BoxViewModel>> GetAll();
     Task<bool> Contains(string boxShortId);
     Task Add(AddBoxModel box);
+    Task MarkAsDelivered(string shortId, DateTime deliveredOn);
 }

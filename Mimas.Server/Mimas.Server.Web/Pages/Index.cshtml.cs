@@ -23,6 +23,9 @@ namespace Mimas.Server.Web.Pages
         [BindProperty]
         public string? AssignedBoxShortId { get; set; }
 
+        [BindProperty]
+        public string? QuickActionsShortId { get; set; }
+
         public IndexModel(ILogger<IndexModel> logger, IMediator mediator)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -34,13 +37,24 @@ namespace Mimas.Server.Web.Pages
             await InitialisePage();
         }
 
-        public async Task OnPost()
+        public async Task OnPostDelivered()
+        {
+            if (string.IsNullOrWhiteSpace(QuickActionsShortId))
+                throw new ArgumentException("Empty short ID.", nameof(QuickActionsShortId));
+            
+            var command = new BoxDeliveredCommand(QuickActionsShortId);
+            await _mediator.Send(command);
+            await InitialisePage();
+        }
+
+        public async Task OnPostManifest()
         {
             var items = SplitManifestIntoItemNames();
             var ownerName = OwnerName ?? throw new ArgumentNullException(nameof(OwnerName));
 
             var command = new RegisterItemBatchCommand(items, ownerName, AssignedBoxShortId);
-            await Task.WhenAll(_mediator.Send(command), InitialisePage());
+            await _mediator.Send(command);
+            await InitialisePage();
         }
 
         private IReadOnlyCollection<string> SplitManifestIntoItemNames()
@@ -69,7 +83,8 @@ namespace Mimas.Server.Web.Pages
 
             Owners = owners.Owners.ToArray();
             Boxes = boxes.Boxes
-                .OrderByDescending(box => box.RegisteredOn)
+                .OrderBy(box => box.DeliveredOn is null ? 0 : 1)
+                .ThenByDescending(box => box.RegisteredOn)
                 .ToArray();
         }
     }

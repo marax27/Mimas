@@ -30,5 +30,5 @@ body {
 
 .chip.chip-success {
     border: solid 1px green;
-    border: green;
+    color: green;
 }

@@ -8,7 +8,24 @@
     <h1 class="display-4">Manifest</h1>
     
     <div class="row">
-        <div class="col-md-12 col-lg-6">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Quick actions</h4>
+                    
+                    <form method="post" asp-page="Index">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Human-assigned Box ID" asp-for="QuickActionsShortId"/>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button class="btn btn-warning" asp-page-handler="Delivered">Mark as delivered</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-6 mt-2">
             <div class="manifest card">
                 <div class="card-body">
                     <h4 class="card-title">Shipping manifest</h4>
@@ -18,21 +35,21 @@
                     <h6 class="card-subtitle mb-2 text-muted">
                         Format: item names separated by a comma (<code>,</code>) or a newline (1 item per line).
                     </h6>
-                    <hr />
+                    <hr/>
 
-                    <form method="post">
+                    <form method="post" asp-page-handler="Manifest">
                         <div class="form-group">
-                            <textarea rows="16" style="width:100%" asp-for="ShippingManifestText"
+                            <textarea rows="16" style="width: 100%" asp-for="ShippingManifestText"
                                 id="ShippingManifestText" name="ShippingManifestText"></textarea>
                         </div>
                         <div class="form-group mt-2 row p-3">
                             <input type="text" class="form-control col-sm-12 col-lg-6 mt-2" placeholder="Human-assigned Box ID (optional)"
-                                id="AssignedBoxShortId" asp-for="AssignedBoxShortId"/>
+                                   id="AssignedBoxShortId" asp-for="AssignedBoxShortId"/>
 
                             <div class="col-sm-12 col-lg-6 mt-2">
                                 <select class="form-select" asp-for="OwnerName" id="OwnerPicker">
                                     <option selected value="">Pick an owner</option>
-                                    @foreach(var owner in Model.Owners)
+                                    @foreach (var owner in Model.Owners)
                                     {
                                         <option value="@owner.Name">@owner.Name</option>
                                     }
@@ -53,10 +70,10 @@
             <div class="boxes card">
                 <div class="card-body">
                     <h4 class="card-title">Registered boxes</h4>
-                    <hr />
+                    <hr/>
                     <div class="border" style="overflow-y: scroll; max-height: 80vh">
                         <table class="table table-hover">
-                        <thead style="position: sticky; top: 0" class="bg-dark text-white">
+                            <thead style="position: sticky; top: 0" class="bg-dark text-white">
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">Items</th>
@@ -64,26 +81,27 @@
                                 <th scope="col">Timestamps</th>
                                 <th scope="col">Info</th>
                             </tr>
-                        </thead>
-                        <tbody style="font-size: 0.75em">
-                            @foreach(var box in Model.Boxes)
+                            </thead>
+                            <tbody style="font-size: 0.75em">
+                            @foreach (var box in Model.Boxes)
                             {
                                 <tr>
-                                    <td>@box.ShortId</td>
+                                    <th>@box.ShortId</th>
                                     <td>@box.ItemCount</td>
                                     <td>@box.OwnerName</td>
                                     <td>
                                         <small><span class="chip chip-primary" title="Registered">REG</span> @box.RegisteredOn</small>
                                         @if (box.DeliveredOn != null)
                                         {
+                                            <br/>
                                             <small><span class="chip chip-success" title="Delivered">DLV</span> @box.DeliveredOn</small>
                                         }
                                     </td>
                                     <td>!</td>
                                 </tr>
                             }
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

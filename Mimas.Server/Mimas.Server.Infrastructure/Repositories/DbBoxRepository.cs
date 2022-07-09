@@ -37,6 +37,18 @@ public class DbBoxRepository : IBoxRepository
         await connection.ExecuteAsync(AddBox, box);
     }
 
+    public async Task MarkAsDelivered(string shortId, DateTime deliveredOn)
+    {
+        var parameters = new { ShortId = shortId, DeliveredOn = deliveredOn };
+
+        await using var connection = new SqlConnection(_settings.Value.ConnectionString);
+        await connection.OpenAsync();
+        var affectedRows = await connection.ExecuteAsync(MarkAsDeliveredSql, parameters);
+
+        if (affectedRows != 1)
+            throw new ApplicationException($"Failed to mark box '{shortId}' as delivered. Affected {affectedRows} DB rows.");
+    }
+
     private const string SelectAllBoxes = $@"
 SELECT
     b.short_id      AS {nameof(BoxViewModel.ShortId)},
@@ -66,5 +78,12 @@ VALUES
         (SELECT o.id FROM Owners o WHERE o.name = @{nameof(AddBoxModel.OwnerName)}),
         @{nameof(AddBoxModel.RegisteredOn)}
     )
+";
+
+    private const string MarkAsDeliveredSql = $@"
+UPDATE Boxes
+SET delivered_on = @DeliveredOn
+WHERE short_id = @ShortId
+    AND delivered_on IS NULL  -- safety check
 ";
 }
